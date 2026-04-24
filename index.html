@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ADHD 药物管理助手</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">ADHD Medication Tracker</p>
+          <h1>ADHD 药物管理助手</h1>
+          <p class="hero-copy">
+            快速记录吃药时间、药后表现、睡眠和其他药物，帮助你回顾自己的规律。
+          </p>
+        </div>
+        <div class="hero-note">
+          <strong>提醒</strong>
+          <p>
+            这是自我观察工具，不替代医生。停药、加药、换药、改剂量请和医生沟通。
+          </p>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel panel-form">
+          <div class="section-title">
+            <h2>今日记录</h2>
+            <p>尽量 1 分钟内完成，能跳过的都可以跳过。</p>
+          </div>
+
+          <div id="editing-banner" class="editing-banner">
+            <span id="editing-text">正在编辑历史记录</span>
+            <button type="button" id="cancel-edit-btn" class="history-btn">取消编辑</button>
+          </div>
+
+          <form id="log-form">
+            <div class="form-grid">
+              <label>
+                <span>日期</span>
+                <input type="date" name="date" id="date" required />
+              </label>
+
+              <label>
+                <span>吃药时间</span>
+                <input type="time" name="takenAt" id="takenAt" required />
+              </label>
+
+              <label>
+                <span>ADHD 药物</span>
+                <select name="medicationName" id="medicationName">
+                  <option value="哌甲酯">哌甲酯</option>
+                  <option value="托莫西汀">托莫西汀</option>
+                  <option value="利右苯丙胺">利右苯丙胺</option>
+                  <option value="安非他命类">安非他命类</option>
+                  <option value="其他">其他</option>
+                </select>
+              </label>
+
+              <label>
+                <span>剂量</span>
+                <input type="text" name="dose" id="dose" placeholder="例：18mg" />
+              </label>
+
+              <label>
+                <span>其他药物</span>
+                <input
+                  type="text"
+                  name="otherMedications"
+                  id="otherMedications"
+                  placeholder="例：坦度螺酮、褪黑素、咖啡"
+                />
+              </label>
+            </div>
+
+            <section class="subsection">
+              <div class="subsection-head">
+                <h3>吃药后表现</h3>
+                <p>默认收起，点开需要的分类再选，减少页面长度。</p>
+              </div>
+
+              <div class="effects-grid" id="effects-sections"></div>
+            </section>
+
+            <section class="subsection">
+              <div class="subsection-head">
+                <h3>状态评分</h3>
+                <p>用滑块快速判断今天的整体状态。</p>
+              </div>
+
+              <div class="score-grid" id="score-fields"></div>
+            </section>
+
+            <section class="subsection">
+              <div class="subsection-head">
+                <h3>睡眠</h3>
+                <p>晚上补记也可以。</p>
+              </div>
+
+              <div class="form-grid">
+                <label>
+                  <span>上床时间</span>
+                  <input type="time" name="bedTime" id="bedTime" />
+                </label>
+
+                <label>
+                  <span>入睡时间</span>
+                  <input type="time" name="sleepTime" id="sleepTime" />
+                </label>
+
+                <label>
+                  <span>夜间醒来次数</span>
+                  <input type="number" min="0" max="10" name="wakeCount" id="wakeCount" value="0" />
+                </label>
+
+                <label>
+                  <span>起床后的状态</span>
+                  <select name="morningState" id="morningState">
+                    <option value="很清醒">很清醒</option>
+                    <option value="一般">一般</option>
+                    <option value="没睡够">没睡够</option>
+                    <option value="很困">很困</option>
+                    <option value="起床困难">起床困难</option>
+                  </select>
+                </label>
+              </div>
+
+              <fieldset class="choice-group">
+                <legend>入睡是否困难</legend>
+                <label class="radio-pill">
+                  <input type="radio" name="sleepDifficulty" value="否" checked />
+                  <span>否</span>
+                </label>
+                <label class="radio-pill">
+                  <input type="radio" name="sleepDifficulty" value="是" />
+                  <span>是</span>
+                </label>
+              </fieldset>
+
+              <div class="chip-group" id="sleep-reasons"></div>
+            </section>
+
+            <label class="notes-field">
+              <span>补充备注</span>
+              <textarea
+                name="note"
+                id="note"
+                rows="4"
+                placeholder="例：下午开会前状态很好，但晚上感觉药效退去后更烦躁"
+              ></textarea>
+            </label>
+
+            <div class="form-actions">
+              <button type="submit" class="primary-btn">保存今天记录</button>
+              <button type="button" id="reset-btn" class="ghost-btn">清空表单</button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="sidebar">
+          <section class="panel">
+            <div class="section-title">
+              <h2>最近规律</h2>
+              <p>根据你本地保存的数据自动生成。</p>
+            </div>
+            <div id="insights" class="insights"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-title">
+              <h2>历史记录</h2>
+              <p>保存在浏览器本地，可继续扩展成数据库版本。</p>
+            </div>
+            <div id="history-list" class="history-list"></div>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <template id="chip-template">
+      <button type="button" class="chip"></button>
+    </template>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
